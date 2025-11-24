@@ -1,11 +1,40 @@
 document.addEventListener('DOMContentLoaded', () => {
     const dailyMenus = {
-        monday: ["Cerdo Guisado Criollo", "Pollo Guisado Casero"],
-        tuesday: ["Bistec Encebollado", "Res Guisada Tradicional"],
-        wednesday: ["Pollo al Horno Doradito", "Pollo Frito Crocante"],
-        thursday: ["Pechuga a la Plancha", "Pechurina Empanizada"],
-        friday: ["Pechuga Salteada Vegetales", "Pechuga a la Crema"],
-        saturday: ["Cerdo Guisado Criollo", "Bistec Encebollado"],
+        monday: [
+            "Cerdo Guisado Criollo", 
+            "Pollo Guisado Casero",
+            "Bistec Encebollado",
+            "Res Guisada Tradicional"
+        ],
+        tuesday: [
+            "Bistec Encebollado", 
+            "Res Guisada Tradicional",
+            "Cerdo Guisado Criollo",
+            "Pollo Guisado Casero"
+        ],
+        wednesday: [
+            "Pollo al Horno Doradito", 
+            "Pollo Frito Crocante",
+            "Pechurina Empanizada",
+            "Pechuga a la Plancha"
+        ],
+        thursday: [
+            "Pechuga a la Plancha", 
+            "Pechurina Empanizada",
+            "Pollo Frito Crocante",
+            "Pollo al Horno Doradito"
+        ],
+        friday: [
+            "Pechuga Salteada Vegetales", 
+            "Pechuga a la Crema",
+            "Pechurina Empanizada"
+        ],
+        saturday: [
+            "Cerdo Guisado Criollo", 
+            "Bistec Encebollado",
+            "Res Guisada Tradicional",
+            "Pollo Guisado Casero"
+        ],
         sunday: []
     };
     const defaultGuarniciones = ["Arroz Blanco", "Habichuelas Rojas", "Ensalada Verde"];
@@ -91,7 +120,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 <span class="control-indicator"></span>
                 <label for="plato-${index}">
                     <span class="item-name">${plato.item}</span>
-                    <span class="item-price">RD$${plato.price.toFixed(2)}</span>
+                    <span class="item-price">RD${plato.price.toFixed(2)}</span>
                 </label>
             </div>
         `).join('');
@@ -124,7 +153,7 @@ document.addEventListener('DOMContentLoaded', () => {
         selectors.previewContainer.innerHTML = `
             <div class="preview-item main-dish">
                 <span class="item-name">${state.selectedPlato.item}</span>
-                <span class="item-price">RD$${state.selectedPlato.price.toFixed(2)}</span>
+                <span class="item-price">RD${state.selectedPlato.price.toFixed(2)}</span>
             </div>
             <div class="preview-item">
                 <ul>${guarnicionesList}</ul>
@@ -155,7 +184,7 @@ document.addEventListener('DOMContentLoaded', () => {
     function buildWhatsAppMessage() {
         const formattedDate = new Date().toISOString().split('T')[0];
         const guarnicionesText = [...defaultGuarniciones, ...state.selectedGuarniciones].join(', ');
-        const message = `Hola, quiero pedir en El Cucharón JR:\nPlato: ${state.selectedPlato.item} - RD$${state.selectedPlato.price.toFixed(2)}\nGuarniciones: ${guarnicionesText}\nFecha: ${formattedDate}`;
+        const message = `Hola, quiero pedir en El Cucharón JR:\nPlato: ${state.selectedPlato.item} - RD${state.selectedPlato.price.toFixed(2)}\nGuarniciones: ${guarnicionesText}\nFecha: ${formattedDate}`;
         return encodeURIComponent(message);
     }
     function sendOrder() {
