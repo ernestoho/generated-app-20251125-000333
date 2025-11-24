@@ -1,0 +1,49 @@
+{
+  "ESPECIAL": [
+    { "item": "Sancocho de 3 Carnes", "price": 375 },
+    { "item": "Mondongo a la Criolla", "price": 375 },
+    { "item": "Pati Mongó y Compañ��a", "price": 350 }
+  ],
+  "PLATO_DEL_DÍA": [
+    { "item": "Cerdo Guisado Criollo", "price": 250 },
+    { "item": "Bistec Encebollado", "price": 275 },
+    { "item": "Res Guisada Tradicional", "price": 250 },
+    { "item": "Pollo Guisado Casero", "price": 250 },
+    { "item": "Pollo Frito Crocante", "price": 250 },
+    { "item": "Pollo al Horno Doradito", "price": 250 },
+    { "item": "Pechurina Empanizada", "price": 250 },
+    { "item": "Pechuga a la Plancha", "price": 400 },
+    { "item": "Pechuga Salteada Vegetales", "price": 400 },
+    { "item": "Pechuga a la Crema", "price": 400 }
+  ],
+  "GUARNICIONES": [
+    "Puré de Yautía",
+    "Puré de Papa",
+    "Plátanos Maduros",
+    "Mangú de Plátano Verde",
+    "Mangú de Guineo",
+    "Guineito Hervido",
+    "Puré de Yuca",
+    "Arroz con Maíz",
+    "Arroz Blanco",
+    "Moro de Habichuelas Negras",
+    "Moro de Habichuelas Rojas",
+    "Moro de Guandules",
+    "Ensalada Verde",
+    "Ensalada de Pasta",
+    "Ensalada de Vegetales",
+    "Ensalada Tipile"
+  ],
+  "EXTRAS": [
+    { "item": "Tostones", "price": 100 },
+    { "item": "Arepita Maíz", "price": 25 },
+    { "item": "Arepita Yuca", "price": 25 },
+    { "item": "Batata Frita", "price": 100 }
+  ],
+  "JUGOS": [
+    { "item": "Cereza", "price": 100 },
+    { "item": "Limón", "price": 100 },
+    { "item": "Chinola", "price": 100 },
+    { "item": "Tamarindo", "price": 100 }
+  ]
+}
