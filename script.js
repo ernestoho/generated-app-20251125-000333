@@ -1,92 +1,64 @@
 document.addEventListener('DOMContentLoaded', () => {
-    const dailyMenus = {
-        monday: [
-            "Cerdo Guisado Criollo", 
-            "Pollo Guisado Casero",
-            "Bistec Encebollado",
-            "Res Guisada Tradicional"
-        ],
-        tuesday: [
-            "Bistec Encebollado", 
-            "Res Guisada Tradicional",
-            "Cerdo Guisado Criollo",
-            "Pollo Guisado Casero"
-        ],
-        wednesday: [
-            "Pollo al Horno Doradito", 
-            "Pollo Frito Crocante",
-            "Pechurina Empanizada",
-            "Pechuga a la Plancha"
-        ],
-        thursday: [
-            "Pechuga a la Plancha", 
-            "Pechurina Empanizada",
-            "Pollo Frito Crocante",
-            "Pollo al Horno Doradito"
-        ],
-        friday: [
-            "Pechuga Salteada Vegetales", 
-            "Pechuga a la Crema",
-            "Pechurina Empanizada"
-        ],
-        saturday: [
-            "Cerdo Guisado Criollo", 
-            "Bistec Encebollado",
-            "Res Guisada Tradicional",
-            "Pollo Guisado Casero"
-        ],
-        sunday: []
+    const dayTabs = {
+        monday: "Lunes",
+        tuesday: "Martes",
+        wednesday: "Miércoles",
+        thursday: "Jueves",
+        friday: "Viernes",
+        saturday: "Sábado",
     };
     const defaultGuarniciones = ["Arroz Blanco", "Habichuelas Rojas", "Ensalada Verde"];
     const WHATSAPP_NUMBER = "18097891080";
     const state = {
         menu: null,
-        selectedPlato: null,
+        selectedDay: getTodayKey(),
+        selectedMain: null,
         selectedGuarniciones: new Set(),
+        selectedExtras: new Set(),
+        selectedJugos: new Set(),
     };
     const selectors = {
         loadingState: document.getElementById('loading-state'),
         appContent: document.getElementById('app-content'),
-        platosHeader: document.getElementById('platos-header'),
-        platosContainer: document.getElementById('platos-container'),
-        platosCard: document.getElementById('platos-card'),
-        platoError: document.getElementById('plato-error'),
+        tabsContainer: document.getElementById('tabs-container'),
+        mainSelectionCard: document.getElementById('main-selection-card'),
+        especialContainer: document.getElementById('especial-container'),
+        platoDiaContainer: document.getElementById('plato-dia-container'),
+        mainError: document.getElementById('main-error'),
         guarnicionesIncluded: document.getElementById('guarniciones-included'),
         guarnicionesAdditional: document.getElementById('guarniciones-additional'),
+        extrasContainer: document.getElementById('extras-container'),
+        jugosContainer: document.getElementById('jugos-container'),
         previewContainer: document.getElementById('preview-container'),
         whatsappBtn: document.getElementById('whatsapp-btn'),
     };
     const fallbackMenu = {
-      "Plato_Del_Día_1": [
-        { "item": "Cerdo Guisado Criollo", "price": 250 },
-        { "item": "Bistec Encebollado", "price": 275 },
-        { "item": "Res Guisada Tradicional", "price": 250 },
-        { "item": "Pollo Guisado Casero", "price": 250 }
-      ],
-      "Plato_Del_Día_2": [
-        { "item": "Pollo Frito Crocante", "price": 250 },
-        { "item": "Pollo al Horno Doradito", "price": 250 },
-        { "item": "Pechurina Empanizada", "price": 250 },
-        { "item": "Pechuga a la Plancha", "price": 400 },
-        { "item": "Pechuga Salteada Vegetales", "price": 400 },
-        { "item": "Pechuga a la Crema", "price": 400 }
-      ],
-      "Guarniciones_1": [
-        "Puré de Yautía",
-        "Puré de Papa",
-        "Plátanos Maduros",
-        "Mangú de Plátano Verde",
-        "Mangú de Guineo",
-        "Guineito Hervido",
-        "Puré de Yuca"
-      ],
-      "Guarniciones_2": [
-        "Arroz con Maíz",
-        "Arroz Blanco",
-        "Moro de Habichuelas Negras",
-        "Moro de Habichuelas Rojas",
-        "Moro de Guandules"
-      ]
+        "ESPECIAL": [
+            { "item": "Sancocho de 3 Carnes", "price": 375 },
+            { "item": "Mondongo a la Criolla", "price": 375 },
+            { "item": "Pati Mongó y Compañía", "price": 350 }
+        ],
+        "PLATO_DEL_DÍA": [
+            { "item": "Cerdo Guisado Criollo", "price": 250 },
+            { "item": "Bistec Encebollado", "price": 275 },
+            { "item": "Res Guisada Tradicional", "price": 250 },
+            { "item": "Pollo Guisado Casero", "price": 250 },
+            { "item": "Pollo Frito Crocante", "price": 250 },
+            { "item": "Pollo al Horno Doradito", "price": 250 },
+            { "item": "Pechurina Empanizada", "price": 250 },
+            { "item": "Pechuga a la Plancha", "price": 400 },
+            { "item": "Pechuga Salteada Vegetales", "price": 400 },
+            { "item": "Pechuga a la Crema", "price": 400 }
+        ],
+        "GUARNICIONES": [
+            "Puré de Yautía", "Puré de Papa", "Plátanos Maduros", "Mangú de Plátano Verde", "Mangú de Guineo", "Guineito Hervido", "Puré de Yuca", "Arroz con Maíz", "Arroz Blanco", "Moro de Habichuelas Negras", "Moro de Habichuelas Rojas", "Moro de Guandules", "Ensalada Verde", "Ensalada de Pasta", "Ensalada de Vegetales", "Ensalada Tipile"
+        ],
+        "EXTRAS": [
+            { "item": "Tostones", "price": 100 }, { "item": "Arepita Maíz", "price": 25 }, { "item": "Arepita Yuca", "price": 25 }, { "item": "Batata Frita", "price": 100 }
+        ],
+        "JUGOS": [
+            { "item": "Cereza", "price": 100 }, { "item": "Limón", "price": 100 }, { "item": "Chinola", "price": 100 }, { "item": "Tamarindo", "price": 100 }
+        ]
     };
     async function fetchMenu() {
         try {
@@ -101,115 +73,155 @@ document.addEventListener('DOMContentLoaded', () => {
     function getTodayKey() {
         const dayIndex = new Date().getDay();
         const days = ['sunday', 'monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday'];
-        return days[dayIndex];
+        const today = days[dayIndex];
+        return today === 'sunday' ? 'monday' : today;
     }
-    function findPlatosForToday(menu, todayKey) {
-        const todaysPlatoNames = dailyMenus[todayKey] || [];
-        const allPlatos = [...menu.Plato_Del_Día_1, ...menu.Plato_Del_Día_2];
-        return allPlatos.filter(plato => todaysPlatoNames.includes(plato.item));
+    function renderTabs() {
+        selectors.tabsContainer.innerHTML = Object.entries(dayTabs).map(([key, label]) =>
+            `<button class="tab-btn ${key === state.selectedDay ? 'active' : ''}" data-day="${key}">${label}</button>`
+        ).join('');
     }
-    function renderPlatos(platos) {
-        if (platos.length === 0) {
-            selectors.platosHeader.textContent = "Hoy no hay Plato del Día";
-            selectors.platosContainer.innerHTML = '<p>El Cucharón JR está cerrado los Domingos. ¡Te esperamos mañana!</p>';
-            return;
-        }
-        selectors.platosContainer.innerHTML = platos.map((plato, index) => `
-            <div class="control-item">
-                <input type="radio" id="plato-${index}" name="plato" value="${plato.item}">
-                <span class="control-indicator"></span>
-                <label for="plato-${index}">
-                    <span class="item-name">${plato.item}</span>
-                    <span class="item-price">RD${plato.price.toFixed(2)}</span>
-                </label>
-            </div>
-        `).join('');
+    function renderMenuSection(container, items, type, name, isPriced = true) {
+        container.innerHTML = items.map((item, index) => {
+            const id = `${name}-${index}`;
+            const value = isPriced ? JSON.stringify(item) : item;
+            const priceHTML = isPriced ? `<span class="item-price">RD${item.price.toFixed(2)}</span>` : '';
+            const itemName = isPriced ? item.item : item;
+            return `
+                <div class="control-item">
+                    <input type="${type}" id="${id}" name="${name}" value='${value}'>
+                    <span class="control-indicator"></span>
+                    <label for="${id}">
+                        <span class="item-name">${itemName}</span>
+                        ${priceHTML}
+                    </label>
+                </div>`;
+        }).join('');
     }
-    function renderGuarniciones(menu) {
+    function renderFullMenu() {
+        const { menu } = state;
+        if (!menu) return;
+        renderMenuSection(selectors.especialContainer, menu.ESPECIAL, 'radio', 'main');
+        renderMenuSection(selectors.platoDiaContainer, menu['PLATO_DEL_DÍA'], 'radio', 'main');
         selectors.guarnicionesIncluded.innerHTML = defaultGuarniciones.map(g => `<span class="chip">${g}</span>`).join('');
-        const allGuarniciones = [...(menu.Guarniciones_1 || []), ...(menu.Guarniciones_2 || [])];
-        const additionalGuarniciones = allGuarniciones.filter(g => !defaultGuarniciones.includes(g));
-        selectors.guarnicionesAdditional.innerHTML = additionalGuarniciones.map((guarnicion, index) => `
-            <div class="control-item">
-                <input type="checkbox" id="guarnicion-${index}" value="${guarnicion}">
-                <span class="control-indicator"></span>
-                <label for="guarnicion-${index}">
-                    <span class="item-name">${guarnicion}</span>
-                </label>
-            </div>
-        `).join('');
+        const additionalGuarniciones = menu.GUARNICIONES.filter(g => !defaultGuarniciones.includes(g));
+        renderMenuSection(selectors.guarnicionesAdditional, additionalGuarniciones, 'checkbox', 'guarnicion', false);
+        renderMenuSection(selectors.extrasContainer, menu.EXTRAS, 'checkbox', 'extra');
+        renderMenuSection(selectors.jugosContainer, menu.JUGOS, 'checkbox', 'jugo');
     }
     function updatePreview() {
-        if (!state.selectedPlato) {
-            selectors.previewContainer.innerHTML = '<p class="empty-preview">Selecciona un plato para ver tu pedido.</p>';
+        if (!state.selectedMain) {
+            selectors.previewContainer.innerHTML = '<p class="empty-preview">Selecciona un plato principal para ver tu pedido.</p>';
             selectors.whatsappBtn.disabled = true;
             return;
         }
-        const date = new Date().toISOString().split('T')[0];
-        const guarnicionesList = [
-            ...defaultGuarniciones,
-            ...Array.from(state.selectedGuarniciones)
-        ].map(g => `<li>${g}</li>`).join('');
-        selectors.previewContainer.innerHTML = `
-            <div class="preview-item main-dish">
-                <span class="item-name">${state.selectedPlato.item}</span>
-                <span class="item-price">RD${state.selectedPlato.price.toFixed(2)}</span>
-            </div>
-            <div class="preview-item">
-                <ul>${guarnicionesList}</ul>
-            </div>
-            <div class="preview-item total">
-                <span>Fecha</span>
-                <span>${date}</span>
-            </div>
-        `;
+        let total = state.selectedMain.price;
+        let previewHTML = `<div class="preview-day">Pedido para: ${dayTabs[state.selectedDay]}</div>`;
+        previewHTML += `<div class="preview-section"><div class="preview-section-title">Principal</div><div class="preview-item"><span>${state.selectedMain.item}</span><span>RD${state.selectedMain.price.toFixed(2)}</span></div></div>`;
+        const allGuarniciones = [...defaultGuarniciones, ...state.selectedGuarniciones];
+        previewHTML += `<div class="preview-section"><div class="preview-section-title">Guarniciones</div><div class="preview-item"><span>${allGuarniciones.join(', ')}</span></div></div>`;
+        if (state.selectedExtras.size > 0) {
+            previewHTML += `<div class="preview-section"><div class="preview-section-title">Extras</div>`;
+            state.selectedExtras.forEach(item => {
+                previewHTML += `<div class="preview-item"><span>${item.item}</span><span>RD${item.price.toFixed(2)}</span></div>`;
+                total += item.price;
+            });
+            previewHTML += `</div>`;
+        }
+        if (state.selectedJugos.size > 0) {
+            previewHTML += `<div class="preview-section"><div class="preview-section-title">Jugos</div>`;
+            state.selectedJugos.forEach(item => {
+                previewHTML += `<div class="preview-item"><span>${item.item}</span><span>RD${item.price.toFixed(2)}</span></div>`;
+                total += item.price;
+            });
+            previewHTML += `</div>`;
+        }
+        previewHTML += `<div class="preview-total"><span>Total</span><span>RD${total.toFixed(2)}</span></div>`;
+        selectors.previewContainer.innerHTML = previewHTML;
         selectors.whatsappBtn.disabled = false;
     }
-    function handlePlatoSelection(event) {
-        const selectedValue = event.target.value;
-        const allPlatos = [...state.menu.Plato_Del_Día_1, ...state.menu.Plato_Del_Día_2];
-        state.selectedPlato = allPlatos.find(p => p.item === selectedValue);
-        selectors.platoError.classList.add('hidden');
-        updatePreview();
-    }
-    function handleGuarnicionSelection(event) {
-        const { value, checked } = event.target;
-        if (checked) {
-            state.selectedGuarniciones.add(value);
-        } else {
-            state.selectedGuarniciones.delete(value);
+    function handleSelection(event) {
+        const input = event.target;
+        if (!input.matches('input[type="radio"], input[type="checkbox"]')) return;
+        const value = input.value;
+        const checked = input.checked;
+        try {
+            const parsedValue = JSON.parse(value);
+            if (input.name === 'main') {
+                state.selectedMain = parsedValue;
+                selectors.mainError.classList.add('hidden');
+            } else if (input.name === 'extra') {
+                checked ? state.selectedExtras.add(parsedValue) : state.selectedExtras.forEach(i => i.item === parsedValue.item && state.selectedExtras.delete(i));
+            } else if (input.name === 'jugo') {
+                checked ? state.selectedJugos.add(parsedValue) : state.selectedJugos.forEach(i => i.item === parsedValue.item && state.selectedJugos.delete(i));
+            }
+        } catch (e) { // For non-JSON values like guarniciones
+            if (input.name === 'guarnicion') {
+                checked ? state.selectedGuarniciones.add(value) : state.selectedGuarniciones.delete(value);
+            }
         }
         updatePreview();
     }
     function buildWhatsAppMessage() {
-        const formattedDate = new Date().toISOString().split('T')[0];
-        const guarnicionesText = [...defaultGuarniciones, ...state.selectedGuarniciones].join(', ');
-        const message = `Hola, quiero pedir en El Cucharón JR:\nPlato: ${state.selectedPlato.item} - RD${state.selectedPlato.price.toFixed(2)}\nGuarniciones: ${guarnicionesText}\nFecha: ${formattedDate}`;
+        let total = state.selectedMain.price;
+        let message = `Hola, quiero hacer un pedido para el *${dayTabs[state.selectedDay]}* en El Cucharón JR:\n\n`;
+        message += `*Principal:*\n- ${state.selectedMain.item} (RD$${state.selectedMain.price.toFixed(2)})\n\n`;
+        const allGuarniciones = [...defaultGuarniciones, ...state.selectedGuarniciones];
+        message += `*Guarniciones:*\n- ${allGuarniciones.join('\n- ')}\n\n`;
+        if (state.selectedExtras.size > 0) {
+            message += `*Extras:*\n`;
+            state.selectedExtras.forEach(item => {
+                message += `- ${item.item} (RD$${item.price.toFixed(2)})\n`;
+                total += item.price;
+            });
+            message += `\n`;
+        }
+        if (state.selectedJugos.size > 0) {
+            message += `*Jugos:*\n`;
+            state.selectedJugos.forEach(item => {
+                message += `- ${item.item} (RD$${item.price.toFixed(2)})\n`;
+                total += item.price;
+            });
+            message += `\n`;
+        }
+        message += `*Total: RD$${total.toFixed(2)}*`;
         return encodeURIComponent(message);
     }
     function sendOrder() {
-        if (!state.selectedPlato) {
-            selectors.platoError.classList.remove('hidden');
-            selectors.platosCard.classList.add('shake');
-            setTimeout(() => selectors.platosCard.classList.remove('shake'), 500);
-            selectors.platosCard.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        if (!state.selectedMain) {
+            selectors.mainError.classList.remove('hidden');
+            selectors.mainSelectionCard.classList.add('shake');
+            setTimeout(() => selectors.mainSelectionCard.classList.remove('shake'), 500);
+            selectors.mainSelectionCard.scrollIntoView({ behavior: 'smooth', block: 'center' });
             return;
         }
         const message = buildWhatsAppMessage();
         const url = `https://api.whatsapp.com/send?phone=${WHATSAPP_NUMBER}&text=${message}`;
         window.open(url, '_blank');
     }
+    function handleTabClick(event) {
+        const button = event.target.closest('.tab-btn');
+        if (!button) return;
+        state.selectedDay = button.dataset.day;
+        document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+        button.classList.add('active');
+        // Reset selections when changing day
+        state.selectedMain = null;
+        state.selectedGuarniciones.clear();
+        state.selectedExtras.clear();
+        state.selectedJugos.clear();
+        document.querySelectorAll('input[type="radio"], input[type="checkbox"]').forEach(input => input.checked = false);
+        updatePreview();
+    }
     async function init() {
         state.menu = await fetchMenu();
-        const todayKey = getTodayKey();
-        const todaysPlatos = findPlatosForToday(state.menu, todayKey);
-        renderPlatos(todaysPlatos);
-        renderGuarniciones(state.menu);
+        renderTabs();
+        renderFullMenu();
         updatePreview();
         selectors.loadingState.classList.add('hidden');
         selectors.appContent.classList.remove('hidden');
-        selectors.platosContainer.addEventListener('change', handlePlatoSelection);
-        selectors.guarnicionesAdditional.addEventListener('change', handleGuarnicionSelection);
+        selectors.tabsContainer.addEventListener('click', handleTabClick);
+        selectors.appContent.addEventListener('change', handleSelection);
         selectors.whatsappBtn.addEventListener('click', sendOrder);
     }
     init();

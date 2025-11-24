@@ -22,24 +22,43 @@
                 <div class="skeleton skeleton-text"></div>
             </div>
             <div id="app-content" class="hidden">
-                <section id="platos-card" class="card">
-                    <h2 id="platos-header">Plato del Día de Hoy</h2>
-                    <div id="platos-container">
-                        <!-- Platos del día se renderizarán aquí -->
+                <div class="tabs-container" id="tabs-container">
+                    <!-- Day tabs will be rendered here -->
+                </div>
+                <section id="main-selection-card" class="card">
+                    <h2>Elige tu Principal</h2>
+                    <p class="card-subtitle">Selecciona una opción de Especial o Plato del Día.</p>
+                    <div id="especial-container">
+                        <!-- Especiales will be rendered here -->
                     </div>
-                    <div id="plato-error" class="error-message hidden">
-                        Por favor, selecciona un plato.
+                    <div id="plato-dia-container">
+                        <!-- Platos del día will be rendered here -->
+                    </div>
+                    <div id="main-error" class="error-message hidden">
+                        Por favor, selecciona un plato principal.
                     </div>
                 </section>
-                <section class="card">
+                <section id="guarniciones-card" class="card">
                     <h2>Guarniciones</h2>
-                    <p class="card-subtitle">Tu plato incluye:</p>
+                    <p class="card-subtitle">Tu plato incluye por defecto:</p>
                     <div id="guarniciones-included" class="chips-container">
                         <!-- Guarniciones incluidas se renderizarán aquí -->
                     </div>
-                    <p class="card-subtitle">Elige adicionales:</p>
+                    <p class="card-subtitle">Elige adicionales si deseas:</p>
                     <div id="guarniciones-additional">
                         <!-- Guarniciones adicionales se renderizarán aquí -->
+                    </div>
+                </section>
+                <section id="extras-card" class="card">
+                    <h2>Extras</h2>
+                    <div id="extras-container">
+                        <!-- Extras will be rendered here -->
+                    </div>
+                </section>
+                <section id="jugos-card" class="card">
+                    <h2>Jugos</h2>
+                    <div id="jugos-container">
+                        <!-- Jugos will be rendered here -->
                     </div>
                 </section>
                 <section class="card preview-card">
