@@ -7,7 +7,6 @@ document.addEventListener('DOMContentLoaded', () => {
         friday: "Viernes",
         saturday: "Sábado",
     };
-    const defaultGuarniciones = ["Arroz Blanco", "Habichuelas Rojas", "Ensalada Verde"];
     const WHATSAPP_NUMBER = "18097891080";
     const state = {
         menu: null,
@@ -25,7 +24,6 @@ document.addEventListener('DOMContentLoaded', () => {
         especialContainer: document.getElementById('especial-container'),
         platoDiaContainer: document.getElementById('plato-dia-container'),
         mainError: document.getElementById('main-error'),
-        guarnicionesIncluded: document.getElementById('guarniciones-included'),
         guarnicionesAdditional: document.getElementById('guarniciones-additional'),
         extrasContainer: document.getElementById('extras-container'),
         jugosContainer: document.getElementById('jugos-container'),
@@ -103,9 +101,7 @@ document.addEventListener('DOMContentLoaded', () => {
         if (!menu) return;
         renderMenuSection(selectors.especialContainer, menu.ESPECIAL, 'radio', 'main');
         renderMenuSection(selectors.platoDiaContainer, menu['PLATO_DEL_DÍA'], 'radio', 'main');
-        selectors.guarnicionesIncluded.innerHTML = defaultGuarniciones.map(g => `<span class="chip">${g}</span>`).join('');
-        const additionalGuarniciones = menu.GUARNICIONES.filter(g => !defaultGuarniciones.includes(g));
-        renderMenuSection(selectors.guarnicionesAdditional, additionalGuarniciones, 'checkbox', 'guarnicion', false);
+        renderMenuSection(selectors.guarnicionesAdditional, menu.GUARNICIONES, 'checkbox', 'guarnicion', false);
         renderMenuSection(selectors.extrasContainer, menu.EXTRAS, 'checkbox', 'extra');
         renderMenuSection(selectors.jugosContainer, menu.JUGOS, 'checkbox', 'jugo');
     }
@@ -118,8 +114,10 @@ document.addEventListener('DOMContentLoaded', () => {
         let total = state.selectedMain.price;
         let previewHTML = `<div class="preview-day">Pedido para: ${dayTabs[state.selectedDay]}</div>`;
         previewHTML += `<div class="preview-section"><div class="preview-section-title">Principal</div><div class="preview-item"><span>${state.selectedMain.item}</span><span>RD${state.selectedMain.price.toFixed(2)}</span></div></div>`;
-        const allGuarniciones = [...defaultGuarniciones, ...state.selectedGuarniciones];
-        previewHTML += `<div class="preview-section"><div class="preview-section-title">Guarniciones</div><div class="preview-item"><span>${allGuarniciones.join(', ')}</span></div></div>`;
+        if (state.selectedGuarniciones.size > 0) {
+            const allGuarniciones = Array.from(state.selectedGuarniciones);
+            previewHTML += `<div class="preview-section"><div class="preview-section-title">Guarniciones</div><div class="preview-item"><span>${allGuarniciones.join(', ')}</span></div></div>`;
+        }
         if (state.selectedExtras.size > 0) {
             previewHTML += `<div class="preview-section"><div class="preview-section-title">Extras</div>`;
             state.selectedExtras.forEach(item => {
@@ -165,13 +163,15 @@ document.addEventListener('DOMContentLoaded', () => {
     function buildWhatsAppMessage() {
         let total = state.selectedMain.price;
         let message = `Hola, quiero hacer un pedido para el *${dayTabs[state.selectedDay]}* en El Cucharón JR:\n\n`;
-        message += `*Principal:*\n- ${state.selectedMain.item} (RD$${state.selectedMain.price.toFixed(2)})\n\n`;
-        const allGuarniciones = [...defaultGuarniciones, ...state.selectedGuarniciones];
-        message += `*Guarniciones:*\n- ${allGuarniciones.join('\n- ')}\n\n`;
+        message += `*Principal:*\n- ${state.selectedMain.item} (RD${state.selectedMain.price.toFixed(2)})\n\n`;
+        if (state.selectedGuarniciones.size > 0) {
+            const allGuarniciones = Array.from(state.selectedGuarniciones);
+            message += `*Guarniciones:*\n- ${allGuarniciones.join('\n- ')}\n\n`;
+        }
         if (state.selectedExtras.size > 0) {
             message += `*Extras:*\n`;
             state.selectedExtras.forEach(item => {
-                message += `- ${item.item} (RD$${item.price.toFixed(2)})\n`;
+                message += `- ${item.item} (RD${item.price.toFixed(2)})\n`;
                 total += item.price;
             });
             message += `\n`;
@@ -179,12 +179,12 @@ document.addEventListener('DOMContentLoaded', () => {
         if (state.selectedJugos.size > 0) {
             message += `*Jugos:*\n`;
             state.selectedJugos.forEach(item => {
-                message += `- ${item.item} (RD$${item.price.toFixed(2)})\n`;
+                message += `- ${item.item} (RD${item.price.toFixed(2)})\n`;
                 total += item.price;
             });
             message += `\n`;
         }
-        message += `*Total: RD$${total.toFixed(2)}*`;
+        message += `*Total: RD${total.toFixed(2)}*`;
         return encodeURIComponent(message);
     }
     function sendOrder() {
