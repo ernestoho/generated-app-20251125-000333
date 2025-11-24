@@ -45,6 +45,7 @@ body {
     border: 1px solid var(--border-color);
     border-radius: 50%;
     margin: 0 auto 12px;
+    /* Placeholder for a logo image or icon */
 }
 .app-header h1 {
     font-size: 28px;
@@ -59,42 +60,6 @@ main {
     display: flex;
     flex-direction: column;
     gap: 20px;
-}
-/* Tabs */
-.tabs-container {
-    display: flex;
-    overflow-x: auto;
-    gap: 8px;
-    padding-bottom: 16px;
-    scrollbar-width: none; /* Firefox */
-}
-.tabs-container::-webkit-scrollbar {
-    display: none; /* Safari and Chrome */
-}
-.tab-btn {
-    flex-shrink: 0;
-    padding: 8px 16px;
-    font-size: 14px;
-    font-weight: 500;
-    background-color: var(--card-bg);
-    border: 1px solid var(--border-color);
-    border-radius: 20px;
-    cursor: pointer;
-    transition: all 0.2s ease-in-out;
-    -webkit-tap-highlight-color: transparent;
-}
-.tab-btn:hover {
-    background-color: #f1f3f5;
-}
-.tab-btn.active {
-    background-color: var(--accent-color);
-    color: white;
-    border-color: var(--accent-color);
-    box-shadow: 0 2px 8px rgba(37, 211, 102, 0.3);
-}
-.tab-btn:focus-visible {
-    outline: 3px solid var(--primary-focus-ring);
-    outline-offset: 2px;
 }
 .card {
     background-color: var(--card-bg);
@@ -119,7 +84,7 @@ main {
     font-size: 14px;
     font-weight: 500;
     color: var(--muted-text-color);
-    margin-top: -4px; /* Adjust spacing after h2 */
+    margin-top: 16px;
     margin-bottom: 8px;
 }
 /* Custom Radio & Checkbox */
@@ -208,42 +173,55 @@ input:focus-visible + .control-indicator {
     outline: 3px solid var(--primary-focus-ring);
     outline-offset: 2px;
 }
+/* Chips for Included Guarniciones */
+.chips-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+}
+.chip {
+    background-color: #e9ecef;
+    color: var(--muted-text-color);
+    padding: 6px 12px;
+    border-radius: 16px;
+    font-size: 14px;
+    font-weight: 500;
+}
 /* Preview Card */
 .preview-card .empty-preview {
     color: var(--muted-text-color);
     text-align: center;
     padding: 20px 0;
 }
-.preview-day {
-    font-weight: 600;
-    margin-bottom: 12px;
-    padding-bottom: 8px;
-    border-bottom: 1px solid var(--border-color);
-}
-.preview-section {
-    margin-top: 12px;
-}
-.preview-section-title {
-    font-size: 14px;
-    font-weight: 600;
-    color: var(--muted-text-color);
-    margin-bottom: 4px;
-}
 .preview-item {
     display: flex;
     justify-content: space-between;
-    padding: 4px 0;
+    padding: 8px 0;
     font-size: 16px;
 }
-.preview-total {
-    display: flex;
-    justify-content: space-between;
+.preview-item.main-dish .item-name {
+    font-weight: 600;
+}
+.preview-item.total {
     font-weight: 700;
     font-size: 18px;
-    margin-top: 16px;
+    margin-top: 12px;
     padding-top: 12px;
-    border-top: 2px solid var(--text-color);
-    color: var(--text-color);
+    border-top: 1px solid var(--border-color);
+}
+.preview-item ul {
+    list-style: none;
+    padding-left: 20px;
+    color: var(--muted-text-color);
+    font-size: 14px;
+}
+.preview-item ul li::before {
+    content: '•';
+    color: var(--accent-color);
+    font-weight: bold;
+    display: inline-block;
+    width: 1em;
+    margin-left: -1em;
 }
 /* Action Bar & Button */
 .action-bar {
