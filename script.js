@@ -42,8 +42,22 @@ document.addEventListener('DOMContentLoaded', () => {
         { "item": "Pechuga Salteada Vegetales", "price": 400 },
         { "item": "Pechuga a la Crema", "price": 400 }
       ],
-      "Guarniciones_1": ["Puré de Yautía", "Puré de Papa", "Plátanos Maduros"],
-      "Guarniciones_2": ["Arroz con Maíz", "Moro de Habichuelas Negras"]
+      "Guarniciones_1": [
+        "Puré de Yautía",
+        "Puré de Papa",
+        "Plátanos Maduros",
+        "Mangú de Plátano Verde",
+        "Mangú de Guineo",
+        "Guineito Hervido",
+        "Puré de Yuca"
+      ],
+      "Guarniciones_2": [
+        "Arroz con Maíz",
+        "Arroz Blanco",
+        "Moro de Habichuelas Negras",
+        "Moro de Habichuelas Rojas",
+        "Moro de Guandules"
+      ]
     };
     async function fetchMenu() {
         try {
@@ -77,7 +91,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 <span class="control-indicator"></span>
                 <label for="plato-${index}">
                     <span class="item-name">${plato.item}</span>
-                    <span class="item-price">$${plato.price.toFixed(2)}</span>
+                    <span class="item-price">RD$${plato.price.toFixed(2)}</span>
                 </label>
             </div>
         `).join('');
@@ -102,6 +116,7 @@ document.addEventListener('DOMContentLoaded', () => {
             selectors.whatsappBtn.disabled = true;
             return;
         }
+        const date = new Date().toISOString().split('T')[0];
         const guarnicionesList = [
             ...defaultGuarniciones,
             ...Array.from(state.selectedGuarniciones)
@@ -109,10 +124,14 @@ document.addEventListener('DOMContentLoaded', () => {
         selectors.previewContainer.innerHTML = `
             <div class="preview-item main-dish">
                 <span class="item-name">${state.selectedPlato.item}</span>
-                <span class="item-price">$${state.selectedPlato.price.toFixed(2)}</span>
+                <span class="item-price">RD$${state.selectedPlato.price.toFixed(2)}</span>
             </div>
             <div class="preview-item">
                 <ul>${guarnicionesList}</ul>
+            </div>
+            <div class="preview-item total">
+                <span>Fecha</span>
+                <span>${date}</span>
             </div>
         `;
         selectors.whatsappBtn.disabled = false;
@@ -134,16 +153,9 @@ document.addEventListener('DOMContentLoaded', () => {
         updatePreview();
     }
     function buildWhatsAppMessage() {
-        const date = new Date();
-        const formattedDate = `${date.getDate()}/${date.getMonth() + 1}/${date.getFullYear()}`;
-        let message = `*Pedido de El Cucharón JR*\n\n`;
-        message += `*Fecha:* ${formattedDate}\n\n`;
-        message += `*Plato:* ${state.selectedPlato.item}\n`;
-        message += `*Guarniciones:*\n`;
-        [...defaultGuarniciones, ...state.selectedGuarniciones].forEach(g => {
-            message += `- ${g}\n`;
-        });
-        message += `\n*Total:* $${state.selectedPlato.price.toFixed(2)}`;
+        const formattedDate = new Date().toISOString().split('T')[0];
+        const guarnicionesText = [...defaultGuarniciones, ...state.selectedGuarniciones].join(', ');
+        const message = `Hola, quiero pedir en El Cucharón JR:\nPlato: ${state.selectedPlato.item} - RD$${state.selectedPlato.price.toFixed(2)}\nGuarniciones: ${guarnicionesText}\nFecha: ${formattedDate}`;
         return encodeURIComponent(message);
     }
     function sendOrder() {
