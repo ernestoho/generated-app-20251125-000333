@@ -1,6 +1,6 @@
 # El Cucharón JR — Plato del Día
 
-[cloudflarebutton]
+[![Deploy to Cloudflare](https://deploy.workers.cloudflare.com/button)](https://deploy.workers.cloudflare.com/?url=https://github.com/ernestoho/generated-app-20251125-000333)
 
 A mobile-first, single-page restaurant web application that displays the daily "Plato del Día" menu for El Cucharón JR (Monday to Saturday), allows customers to select from today's available dishes, choose included and optional guarniciones (side dishes), preview their order, and send it directly via WhatsApp. The app loads menu data from `menu.json`, detects the current weekday, and ensures a simple, intuitive experience optimized for mobile devices.
 
@@ -141,7 +141,7 @@ Deploy as static files to Cloudflare Pages for global CDN hosting.
    - For manual: Upload `dist/` contents.
    - Custom domain optional.
 
-[cloudflarebutton]
+[![Deploy to Cloudflare](https://deploy.workers.cloudflare.com/button)](https://deploy.workers.cloudflare.com/?url=https://github.com/ernestoho/generated-app-20251125-000333)
 
 3. **Verify Deployment**:
    - Access the live URL.
